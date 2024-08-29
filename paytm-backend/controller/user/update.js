@@ -3,6 +3,7 @@ const { users, updateZod } = require("../../models")
 const userUpdate = async (req, res, next) => {
    try {
       const payload = updateZod.safeParse(req.body);
+      console.log('update',req.body)
       if (payload.success) {
          const userId = req.headers.userId;
          const { firstName, lastName, password } = req.body;

@@ -2,6 +2,7 @@ const { users } = require("../models");
 const { jwtVerify } = require("../services/jwtService");
 
 const userMiddleware = async (req, res, next) => {
+   
    try {
       const tokenType = req.headers.token;
       const token = tokenType.split(' ')[1];

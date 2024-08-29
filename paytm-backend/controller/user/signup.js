@@ -22,6 +22,7 @@ const userSignup = async (req, res) => {
             return res.json({
                success: true,
                message: "Account Created!",
+               user:user,
                token: jwtSign({ userId: user._id })
             })
          }

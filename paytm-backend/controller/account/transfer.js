@@ -6,7 +6,8 @@ const accountTransfer = async (req, res, next) => {
    try {
       const session = await mongoose.startSession();
       session.startTransaction();
-      const { amount, to } = req.body;
+      const { to, amount } = req.body;
+      
       const account = await accounts.findOne({ userId: req.headers.userId });
       if (!account || account.balance < amount) {
          await session.abortTransaction();
@@ -27,7 +28,7 @@ const accountTransfer = async (req, res, next) => {
          else {
             // perform the transfer
             await accounts.updateOne({ userId: req.headers.userId }, { $inc: { balance: -amount } }).session(session);
-            await accounts.findOne({ userId: to }, { $inc: { balance: amount } }).session(session);
+            await accounts.updateOne({ userId: to }, { $inc: { balance: amount } }).session(session);
 
             // commit the transaction
             await session.commitTransaction();

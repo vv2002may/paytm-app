@@ -10,7 +10,7 @@ const accountSchema = new mongoose.Schema({
       type: Number,
       required: true,
    }
-})
+},{timestamps:true})
 
 const accounts = mongoose.model('accounts', accountSchema);
 

@@ -1,13 +1,13 @@
 const express = require('express');
-const { userUpdate, userSignup, userFetch } = require('../controller/user');
+const { userUpdate, userSignup, userFetch, userSignin } = require('../controller/user');
 const { userMiddleware } = require('../middleware');
 
 
 const userRouter = express.Router();
 
-userRouter.get('/bulk',userMiddleware, userFetch)
+userRouter.get('/',userMiddleware, userFetch)
 userRouter.put('/', userMiddleware, userUpdate)
 userRouter.post('/signup',userSignup )
-
+userRouter.post('/signin',userSignin)
 
 module.exports = { userRouter };
