@@ -1,22 +1,23 @@
 const { users, updateZod } = require("../../models")
 
 const userUpdate = async (req, res, next) => {
+   console.log('update', req.body);
    try {
       const payload = updateZod.safeParse(req.body);
-      console.log('update',req.body)
       if (payload.success) {
          const userId = req.headers.userId;
          const { firstName, lastName, password } = req.body;
-         await users.findOneAndUpdate({ _id: userId }, { firstName, lastName, password })
+         const user = await users.findOneAndUpdate({ _id: userId }, { firstName, lastName, password })
          return res.status(200).json({
             success: true,
-            message: 'Details Updated!'
+            message: 'Details Updated!',
+            user: user,
          })
       }
       else {
          return res.json({
             success: false,
-            message:'Wrong Inputs!'
+            message: 'Wrong Inputs!'
          })
       }
    }

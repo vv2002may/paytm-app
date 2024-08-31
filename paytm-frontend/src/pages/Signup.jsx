@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { ENDPOINT } from "../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { LocalStorageSave } from "../services/LocalStorageSave";
 
 export default function Signup() {
   const { register, handleSubmit } = useForm();
@@ -10,19 +11,15 @@ export default function Signup() {
 
   async function handleForm(data) {
     const result = await axios.post(ENDPOINT + "api/v1/user/signup/", data);
-    // console.log(result.data);
     alert(result.data.message);
     if (result.data.success) {
-      localStorage.setItem("token", result.data.token);
-      localStorage.setItem("user", result.data.user.firstName);
-      localStorage.setItem("userId", result.data.user._id);
+      LocalStorageSave({ result });
       navigate("/");
     }
   }
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <h1 className="text-xl font-medium m-4">Sign Up</h1>
       <form
         className="flex flex-col justify-center items-center"
         onSubmit={handleSubmit(handleForm)}
@@ -51,7 +48,13 @@ export default function Signup() {
           placeholder="Password"
           {...register("password")}
         />
-        <input className="border-2 rounded-md p-2 m-2" type="submit" />
+        <button className="bg-slate-600 text-white border-2 rounded-md p-1 m-2 w-[70%]">Sign Up</button>
+        <p>
+        Already have an account?{" "}
+        <button className="text-red-700 underline" onClick={() => navigate("/signin")}>
+          Sign In
+        </button>{" "}
+      </p>
       </form>
     </div>
   );

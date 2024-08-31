@@ -3,17 +3,22 @@ import { ENDPOINT } from "../config";
 import axios from "axios";
 import UsersList from "../components/UsersList";
 import { useNavigate } from "react-router-dom";
+import SearchUser from "../components/SearchUser";
 
 export default function Dashboard() {
   const [usersList, setUsersList] = useState();
   const [balance, setBalance] = useState();
-  const user = localStorage.getItem("user");
+  const [firstName, setFirstName] = useState(localStorage.getItem("firstName"));
+  const [lastName, setLastName] = useState(localStorage.getItem("lastName"));
+  const user =
+    localStorage.getItem("firstName") + " " + localStorage.getItem("lastName");
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
+  const [filter, setFilter] = useState("");
   const navigate = useNavigate();
 
   async function fetchUsers() {
-    const result = await axios.get(ENDPOINT + "api/v1/user/", {
+    const result = await axios.get(ENDPOINT + `api/v1/user?filter=${filter}`, {
       headers: {
         token: token,
       },
@@ -30,26 +35,36 @@ export default function Dashboard() {
     setBalance(result.data.balance);
   }
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       alert("Please signin first!");
       navigate("/signin");
     }
+    checkBalance();
     fetchUsers();
-  }, []);
+  }, [filter]);
 
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex justify-between items-center p-5 w-[60%] m-3 border-solid border-2 rounded-lg">
-        <h3>{user}</h3>
-        <button className="border-2 rounded-md p-2 m-2" onClick={checkBalance}>
-          {balance ? <span>&#8377;{balance.toFixed(2)}</span> : "Check Balance"}
-        </button>
+        <p className="bg-slate-500 rounded text-white p-1 pr-2 pl-2 m-1">
+          {localStorage.getItem("firstName") +
+            " " +
+            localStorage.getItem("lastName")}
+        </p>
+        {balance && <span>Account Balance : &#8377;{balance.toFixed(2)}</span>}
+      </div>
+      <div>
+        <SearchUser setFilter={setFilter} />
       </div>
       <div className="flex flex-col justify-between items-center">
         {usersList &&
           usersList.map((user, index) => {
             if (user._id != userId)
               return <UsersList key={index} user={user} />;
+            else {
+              localStorage.setItem("firstName", user.firstName);
+              localStorage.setItem("lastName", user.lastName);
+            }
           })}
       </div>
     </div>

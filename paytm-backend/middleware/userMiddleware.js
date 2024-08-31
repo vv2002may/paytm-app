@@ -24,7 +24,7 @@ const userMiddleware = async (req, res, next) => {
    catch (err) {
       return res.json({
          success: false,
-         message: err,
+         message: `Some error occured while authentication!`,
       })
    }
 

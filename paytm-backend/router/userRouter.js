@@ -6,7 +6,7 @@ const { userMiddleware } = require('../middleware');
 const userRouter = express.Router();
 
 userRouter.get('/',userMiddleware, userFetch)
-userRouter.put('/', userMiddleware, userUpdate)
+userRouter.put('/update', userMiddleware, userUpdate)
 userRouter.post('/signup',userSignup )
 userRouter.post('/signin',userSignin)
 
