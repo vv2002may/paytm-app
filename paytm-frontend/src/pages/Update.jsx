@@ -3,12 +3,11 @@ import { useForm } from "react-hook-form";
 import { ENDPOINT } from "../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Update() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState(localStorage.getItem("firstName"));
-  const [lastName, setLastName] = useState(localStorage.getItem("lastName"));
   async function handleForm(data) {
     console.log(data);
     await axios
@@ -19,11 +18,9 @@ export default function Update() {
       })
       .then((result) => {
         console.log(result.data);
-        alert(result.data.message);
+        toast(result.data.message);
         if (result.data.success) {
-          // localStorage.setItem("firstName", result.data.user.firstName);
-          // localStorage.setItem("lastName", result.data.user.lastName);
-          window.location.href = "/";
+          navigate("/");
         }
       })
       .catch((err) => {
@@ -43,20 +40,26 @@ export default function Update() {
         className="flex flex-col justify-center items-center"
         onSubmit={handleSubmit(handleForm)}
       >
-        <input
-          className="border-2 rounded-md p-1 m-1"
-          type="text"
-          defaultValue={localStorage.getItem("firstName")}
-          placeholder="Firstname"
-          {...register("firstName")}
-        />
-        <input
-          className="border-2 rounded-md p-1 m-1"
-          type="text"
-          defaultValue={localStorage.getItem("lastName")}
-          placeholder="Lastname"
-          {...register("lastName")}
-        />
+        <label>
+          First Name:
+          <input
+            className="border-2 rounded-md p-1 m-5"
+            type="text"
+            defaultValue={localStorage.getItem("firstName")}
+            placeholder="Firstname"
+            {...register("firstName")}
+          />
+        </label>
+        <label>
+          Last Name:
+          <input
+            className="border-2 rounded-md p-1 m-5"
+            type="text"
+            defaultValue={localStorage.getItem("lastName")}
+            placeholder="Lastname"
+            {...register("lastName")}
+          />
+        </label>
         {/* <input
           className="border-2 rounded-md p-1 m-1"
           type="password"

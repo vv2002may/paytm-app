@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { ENDPOINT } from "../config";
 import axios from "axios";
 import UsersList from "../components/UsersList";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import SearchUser from "../components/SearchUser";
+import { toast } from "react-toastify";
+
 
 export default function Dashboard() {
   const [usersList, setUsersList] = useState();
   const [balance, setBalance] = useState();
-  const [firstName, setFirstName] = useState(localStorage.getItem("firstName"));
-  const [lastName, setLastName] = useState(localStorage.getItem("lastName"));
   const user =
     localStorage.getItem("firstName") + " " + localStorage.getItem("lastName");
   const userId = localStorage.getItem("userId");
@@ -36,7 +36,7 @@ export default function Dashboard() {
   }
   useEffect(() => {
     if (!userId) {
-      alert("Please signin first!");
+      toast("Please signin first!");
       navigate("/signin");
     }
     checkBalance();
@@ -47,9 +47,7 @@ export default function Dashboard() {
     <div className="flex flex-col items-center justify-center">
       <div className="flex justify-between items-center p-5 w-[60%] m-3 border-solid border-2 rounded-lg">
         <p className="bg-slate-500 rounded text-white p-1 pr-2 pl-2 m-1">
-          {localStorage.getItem("firstName") +
-            " " +
-            localStorage.getItem("lastName")}
+          {user}
         </p>
         {balance && <span>Account Balance : &#8377;{balance.toFixed(2)}</span>}
       </div>

@@ -6,12 +6,15 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import Update from "./pages/Update";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <div>
       <BrowserRouter>
         <Navbar />
+        <ToastContainer/>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/signin" element={<Signin />} />

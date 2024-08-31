@@ -1,22 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ENDPOINT } from "../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { LocalStorageSave } from "../services/LocalStorageSave";
+import { toast } from "react-toastify";
+import { createPortal } from "react-dom";
+
 
 export default function Signin() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
   async function handleForm(data) {
-    // console.log(data);
     const result = await axios.post(ENDPOINT + "api/v1/user/signin/", data);
-    // console.log(result.data);
-    alert(result.data.message);
+    // alert(result.data.message);
+    toast(result.data.message);
     if (result.data.success) {
       LocalStorageSave({ result });
-      navigate("/");
+        navigate("/")
     }
   }
 

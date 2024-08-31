@@ -4,32 +4,11 @@ import Select from "react-select";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState(localStorage.getItem("firstName"));
-  const [lastName, setLastName] = useState(localStorage.getItem("lastName"));
   const user =
     localStorage.getItem("firstName") + " " + localStorage.getItem("lastName");
-  console.log(user);
   const userId = localStorage.getItem("userId");
-  const list = [
-    { value: "user", label: firstName },
-    { value: "update", label: "Update Details" },
-    { value: "signout", label: "Sign Out" },
-  ];
-
-  useEffect(() => {
-    // window.location.reload();
-  })
-  function handleUser(data) {
-    console.log(data);
-    if (data.value == "update") {
-      navigate("/update");
-    } else if (data.value == "signout") {
-      localStorage.clear();
-      window.location.href = "/signin";
-    } else if (data.value == "user") {
-      navigate("/");
-    }
-  }
+  const [drop, setDrop] = useState(false);
+  
   return (
     <nav className="flex flex-row justify-between items-center bg-slate-200 p-2 m-3 border- rounded-md">
       <button
@@ -40,12 +19,45 @@ export default function Navbar() {
       </button>
 
       {userId && (
-        <Select
-          className="w-[15%]"
-          onChange={handleUser}
-          options={list}
-          defaultValue={{ value: "user", label: firstName }}
-        />
+        <div>
+          <button
+            id="dropdownDefaultButton"
+            onClick={() => setDrop(prev => !prev)}
+            onMouseEnter={() => setDrop(true)}
+            onBlur={()=>setDrop(false)}
+            className="text-white bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-5"
+          >
+            {user}
+          </button>
+
+          <div
+            id="dropdownId"
+            className={`${drop ? '' : "hidden"} fixed mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+            onMouseEnter={()=>setDrop(true)}
+          >
+            <ul
+              className="py-2 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownDefaultButton"
+            >
+              <li>
+                <a
+                  href="update"
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Update Details
+                </a>
+              </li>
+              <li>
+                <a
+                  onClick={() => { localStorage.clear(); navigate("signin")}}
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Sign Out
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
       )}
     </nav>
   );
